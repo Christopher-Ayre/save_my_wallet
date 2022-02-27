@@ -6,6 +6,11 @@ import requests
 CSV_LOCATION = "csv/"
 CSV_DOWNLOAD_NAME = "download"
 
+DB_NAME = 'fuel'
+DB_HOST = '127.0.0.1'
+DB_USERNAME = 'postgres'
+DB_PASSWORD = 'postgres'
+
 # Print iterations progress, From: https://stackoverflow.com/a/34325723
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
     """
@@ -43,7 +48,7 @@ def download(save_location):
 def create_table():
     try:
         #Create table
-        conn = psycopg2.connect("dbname=fuel user=postgres")
+        conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s" % (DB_NAME,DB_USERNAME,DB_PASSWORD,DB_HOST))
         cur = conn.cursor()
         cur.execute("CREATE TABLE PRICE (DATE DATE, LOCATION_NAME VARCHAR(60), FUEL_TYPE VARCHAR(15), PRICE DECIMAL(5,2), ADDRESS VARCHAR(40), SUBURB VARCHAR(30), POSTCODE INT, PRIMARY KEY(DATE, LOCATION_NAME, FUEL_TYPE));")
 
@@ -81,7 +86,7 @@ def insert(file_name):
                 #date,location, fueltype,price, address, suburb,postcode
         data = (line[0],line[1],line[3],line[4],line[5],line[6], line[7])
         try:
-            conn = psycopg2.connect("dbname=fuel user=postgres")
+            conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s" % (DB_NAME,DB_USERNAME,DB_PASSWORD,DB_HOST))
             cur = conn.cursor()
             cur.execute(sql, data)
             #Save changes to DB

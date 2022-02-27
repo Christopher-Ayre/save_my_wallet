@@ -2,6 +2,11 @@
 import psycopg2
 from datetime import date, timedelta
 
+DB_NAME = 'fuel'
+DB_HOST = '127.0.0.1'
+DB_USERNAME = 'postgres'
+DB_PASSWORD = 'postgres'
+
 # import fuelwatch.fuelwatch as fw
 
 # opts3 = {'Product': 1, 'Suburb': "Queens Park"}
@@ -23,7 +28,7 @@ def average(data):
     return average
 
 def ten_onehundred(postcode,fuel_type):
-    conn = psycopg2.connect("dbname=fuel user=postgres")
+    conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s" % (DB_NAME,DB_USERNAME,DB_PASSWORD,DB_HOST))
     cur = conn.cursor()
     #100 days ago was:
     today = date.today()
